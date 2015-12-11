@@ -1,0 +1,159 @@
+CREATE TABLE WebUser (
+  UserId CHAR(3) primary key,--auto_increment
+  UserName VARCHAR(15) not null,
+  address VARCHAR(15) not null,
+  UserPassword VARCHAR(15) not null,
+  email VARCHAR(30) not null,
+  is_staff NUMBER(1) not null
+);
+
+CREATE TABLE WebOrder (
+  OrderId CHAR(10) primary key,--auto_increment
+  OrderDate date not null,
+  --OrderTime time not null,
+  paid NUMBER(1) not null,
+  UserId char(3) REFERENCES WebUser(UserId) --foriegn key, not null
+);
+
+CREATE TABLE Supplier (
+  SupId char(3) primary key,--auto_increment
+  SupName varchar(15) not null
+);
+
+CREATE TABLE Product (
+  ProductId CHAR(3) primary key,
+  price real not null,
+  StockQuantity int not null,
+  description VARCHAR(100),
+  active NUMBER(1) not null,
+  SupId char(3) REFERENCES Supplier(SupId)--foreign key, not null
+);
+
+CREATE TABLE OrderProduct (
+  OrderId char(10) REFERENCES WebOrder(OrderId),
+  ProductId char(3) REFERENCES Product(ProductId),
+  quantity int not null
+);
+--^made for the attribute relationship but not sure how to incorporate --the quantity/if stockquan is needed
+
+INSERT INTO WebUser (UserId, UserName, address, UserPassword, email, is_staff) VALUES
+(1, 'Caroline', '1348 Brixham St', '12345t6', 'cannrose@aol.com', 0);
+INSERT INTO WebUser VALUES
+(2, 'Andy', '348 Panam St', '19045t6', 'annr@aol.com', 0);
+INSERT INTO WebUser VALUES
+(3, 'Joe', '948 Bemt Tr', 'prt6', 'joese@gmail.com', 0);
+INSERT INTO WebUser VALUES
+(4, 'Sandy', '178 Meadow Dr', 'greatt7', 'sandye@hotmail.com', 0);
+INSERT INTO WebUser VALUES
+(5, 'Darel', '138 Buham St', '012345t6', 'darlose@aol.com', 0);
+INSERT INTO WebUser VALUES
+(6, 'Rick', '678 Panay St', '190845t6', 'rickr@aol.com', 1);
+INSERT INTO WebUser VALUES
+(7, 'Carl', '98 Bemt Tr', 'prut6', 'carle@gmail.com', 0);
+INSERT INTO WebUser VALUES
+(8, 'Carol', '52 Walkers Dr', 'treat7', 'carols@hotmail.com', 0);
+INSERT INTO WebUser VALUES
+(9, 'Mishonne', '70 Brim St', 'h12345t6', 'misonse@aol.com', 0);
+INSERT INTO WebUser VALUES
+(10, 'Morgan', '3458 Park St', '1u9045t6', 'momo@aol.com', 1);--1 is staff, 0 is customer
+
+INSERT INTO WebOrder VALUES
+(101, '27-SEP-15', 1, 1);
+INSERT INTO WebOrder VALUES
+(102, '27-OCT-15', 1, 2);
+INSERT INTO WebOrder VALUES
+(103, '27-OCT-15', 1, 3);
+INSERT INTO WebOrder VALUES
+(104, '28-OCT-15', 1, 4);
+INSERT INTO WebOrder VALUES
+(105, '31-OCT-15', 1, 5);
+INSERT INTO WebOrder VALUES
+(106, '31-OCT-15', 1, 6);
+INSERT INTO WebOrder VALUES
+(107, '28-OCT-15', 1, 7);
+INSERT INTO WebOrder VALUES
+(108, '31-OCT-15', 1, 8);
+INSERT INTO WebOrder VALUES
+(109, '31-OCT-15', 1, 9);
+INSERT INTO WebOrder VALUES
+(110, '01-NOV-15', 1, 10);
+
+INSERT INTO Supplier VALUES
+(201, 'the good ones');
+INSERT INTO Supplier VALUES
+(202, 'Beast');
+INSERT INTO Supplier VALUES
+(203, 'awesome');
+INSERT INTO Supplier VALUES
+(204, 'bRUH');
+INSERT INTO Supplier VALUES
+(205, 'CHEAPest');
+
+INSERT INTO Product VALUES
+(301, 23, 20, 'Pillow Pet', 1, 205);
+INSERT INTO Product VALUES
+(302, 28, 2, 'Pencil', 1, 204);
+INSERT INTO Product VALUES
+(303, 83,70, 'golf club', 1, 203);
+INSERT INTO Product VALUES
+(304, 29, 24, 'Backpack', 1, 201);
+INSERT INTO Product VALUES
+(305, 30, 30, 'Water Bottle', 1, 202);
+INSERT INTO Product VALUES
+(306, 29, 24, 'GiftCards', 1, 204);
+INSERT INTO Product VALUES
+(307, 30, 30, 'Chair', 1, 202);
+
+INSERT INTO OrderProduct VALUES
+(107, 301, 3);
+INSERT INTO OrderProduct VALUES
+(106, 301, 3);
+INSERT INTO OrderProduct VALUES
+(105, 307, 1);
+INSERT INTO OrderProduct VALUES
+(104, 305, 1);
+INSERT INTO OrderProduct VALUES
+(103, 302, 1);
+INSERT INTO OrderProduct VALUES
+(102, 304, 2);
+INSERT INTO OrderProduct VALUES
+(101, 306, 1);
+INSERT INTO OrderProduct VALUES
+(108, 303, 4);
+INSERT INTO OrderProduct VALUES
+(109, 302, 1);
+INSERT INTO OrderProduct VALUES
+(110, 301, 1);
+
+
+QUIERES:
+
+select * from product where DESCRIPTION like 'Pencil' ORDER BY Price;
+--Customer checks available product with keyword and sorts results by price
+
+INSERT INTO WebUser VALUES
+(70, 'Samantha', '1701 D St', '2499786', 'sross@gmail.com', 0);
+--customer creates an account
+
+UPDATE WebUser SET address = '1701 D drive'
+--Customer update info
+
+DELETE FROM WebUser WHERE UserName = 'Samantha'
+--customer deletes account
+
+Select productid from PRODUCT where ACTIVE = '1'
+--customers can add multiple products to order
+
+
+CREATE TRIGGER LowStock 
+ON WebUser
+FOR INSERT
+AS
+IF (SELECT COUNT(*) FROM Product WHERE StockQuantity = '1') = 1
+ BEGIN
+  PRINT 'Order More from Supplier'
+ END
+go
+INSERT Product (ProductId) VALUES ('1')
+
+

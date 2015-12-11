@@ -1,0 +1,11 @@
+<web-app>
+   <servlet>
+   	<servlet-name>Select Page</servlet-name>
+   	<servlet-class>JDBServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+   	 <servlet-name>Select Page</servlet-name>
+   	 <url-pattern>/select</url-pattern>
+   </servlet-mapping>
+
+</web-app>
